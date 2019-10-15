@@ -1,4 +1,5 @@
 class Instructor::LessonsController < ApplicationController
+end
   before_action :authenticate_user!
   before_action :require_authorized_for_current_section
 
