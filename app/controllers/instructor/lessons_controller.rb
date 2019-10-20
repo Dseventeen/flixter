@@ -29,4 +29,4 @@ end
     params.require(:lesson).permit(:title, :subtitle)
   end
 
-end
+
