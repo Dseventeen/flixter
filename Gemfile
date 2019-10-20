@@ -72,7 +72,18 @@ gem 'simple_form'
 
 gem 'devise'
 
+# For image uploading
 gem 'carrierwave', '~> 1.0'
+gem 'figaro'
+gem 'fog-aws'
+gem 'mini_magick'
+gem 'carrierwave-aws'
 
-gem "fog-aws"
+# Payments
+gem 'stripe'
 
+# Lesson Pages
+gem 'ranked-model'
+gem 'jquery-ui-rails'
+
+gem 'font-awesome-rails'
