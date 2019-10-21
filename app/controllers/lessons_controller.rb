@@ -7,9 +7,9 @@ end
 
   private
 
-  def require_authorized_for_current_lesson.section.course
+  def require_authorized_for_current_course
     if current_course.enrolled_in? != true
-      redirect_to /courses/:id(.:format), alert: 'To access the cours, please enroll first'
+      redirect_to course_url, alert: 'To access the course, please enroll first'
     end
   end
 
