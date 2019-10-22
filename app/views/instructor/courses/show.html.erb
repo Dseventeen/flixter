@@ -1,432 +1,29 @@
 <script>
   $(function() {
-    $('.lessons').sortable({
-      update: function( event, ui ) {
-        $.ajax({
-          type: 'PUT',
-          url: ui.item.data('update-url'),
-          dataType: 'json',
-          data: { lesson: { row_order_position: ui.item.index() } }
-        });
-      }
-    });
 
-
-    $('.sections').sortable({
-      update: function( event, ui ) {
-        $.ajax({
-          type: 'PUT',
-          url: ui.item.data('update-url'),
-          dataType: 'json',
-          data: { section: { row_order_position: ui.item.index() } }
-        });
-      }
+    $('.new-lesson-button').click(function( event ) {
+      var lessonURL=  $(event.target).data('lesson-url');
+      $('#newLessonForm').attr('action', lessonURL);
     });
 
   });
-</script>
 
-<br />
-<div class="booyah-box col-10 offset-1">
-  <h1 class="text-center"><%= current_course.title %></h1>
-  <%= image_tag current_course.image, class: 'img-fluid' %>
-
-  <div class="text-center">
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newSectionModal">
-      Add a new section...
-    </button>
-  </div>
-
-  <ul class="sections">
-    <% current_course.sections.rank(:row_order).each do |section| %>
-      <li data-update-url="<%= instructor_section_path section %>" class="section-li">
-        <div class="header float-left">
-          <span class="fa fa-ellipsis-v"></span>
-          <%= section.title %>
-        </div>
-        <%= link_to 'New Lesson', new_instructor_section_lesson_path(section), class: 'float-right btn btn-primary btn-sm' %>
-        <br class="clr" />
-        <br class="clr" />
-
-        <ul class="lessons">
-          <% section.lessons.rank(:row_order).each do |lesson| %>
-            <li data-update-url="<%= instructor_lesson_path lesson %>">
-              <div class="row">
-                <div class="col-1">
-                  <br />
-                  <span class="fa fa-ellipsis-v"></span>
-                </div>
-                <div class="col-11 text-center">
-                  <p>
-                    <b><%= lesson.title %></b>
-                  </p>
-                  <p>
-                    <%= lesson.subtitle %>
-                  </p>
-                </div>
-              </div>
-              <br class="clr" />
-            </li>
-          <% end %>
-        </ul>
-        <br class="clr" />
-      </li>
-    <% end %>
-  </ul>
-</div>
-
-
-
-Lesson 35: Moving the New Section Form into a Modal
-It is possible for instructors to create sections and lessons for the courses they create. When the user presses the link to create a new section they are taken to a page that only contains a form to create a new section. In this lesson, rather than sending the user to a new page when the user presses the link to add a section, we will present the form to create a new section inside a pop-up modal.
-
-
-Bootstrap provides us with the UI component for a modal. Visit the Bootstrap documentation and grab the live demo modal in the documentation. Copy the HTML they provide, and paste the contents into the bottom of app/views/instructor/courses/show.html.erb:
-
-<script>
   $(function() {
+
     $('.lessons').sortable({
       update: function( event, ui ) {
         $.ajax({
           type: 'PUT',
           url: ui.item.data('update-url'),
-          dataType: 'json',
-          data: { lesson: { row_order_position: ui.item.index() } }
-        });
-      }
-    });
-
-
-    $('.sections').sortable({
-      update: function( event, ui ) {
-        $.ajax({
-          type: 'PUT',
-          url: ui.item.data('update-url'),
-          dataType: 'json',
-          data: { section: { row_order_position: ui.item.index() } }
+          dataType: 'json', 
+          data: { lesson: { row_order_position: ui.item.index() }}
         });
       }
     });
 
   });
-</script>
 
-<br />
-<div class="booyah-box col-10 offset-1">
-  <h1 class="text-center"><%= current_course.title %></h1>
-  <%= image_tag current_course.image, class: 'img-fluid' %>
-
-  <div class="text-center">
-    <%= link_to 'Add a new section...', new_instructor_course_section_path(current_course), class: 'btn btn-primary btn-lg' %>
-  </div>
-
-  <ul class="sections">
-    <% current_course.sections.rank(:row_order).each do |section| %>
-      <li data-update-url="<%= instructor_section_path section %>" class="section-li">
-        <div class="header float-left">
-          <span class="fa fa-ellipsis-v"></span>
-          <%= section.title %>
-        </div>
-        <%= link_to 'New Lesson', new_instructor_section_lesson_path(section), class: 'float-right btn btn-primary btn-sm' %>
-        <br class="clr" />
-        <br class="clr" />
-
-        <ul class="lessons">
-          <% section.lessons.rank(:row_order).each do |lesson| %>
-            <li data-update-url="<%= instructor_lesson_path lesson %>">
-              <div class="row">
-                <div class="col-1">
-                  <br />
-                  <span class="fa fa-ellipsis-v"></span>
-                </div>
-                <div class="col-11 text-center">
-                  <p>
-                    <b><%= lesson.title %></b>
-                  </p>
-                  <p>
-                    <%= lesson.subtitle %>
-                  </p>
-                </div>
-              </div>
-              <br class="clr" />
-            </li>
-          <% end %>
-        </ul>
-        <br class="clr" />
-      </li>
-    <% end %>
-  </ul>
-
-</div>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-Save the file. Navigate to the instructor course overview page. Notice the button that appears at the bottom of the page. Press the button and it will present you with a modal.
-
-In the next lesson we're going to add another modal to the page. Since we cannot have two HTML elements with the same id, we should take a moment now to adjust the ids of the HTML elements we just added the page. Change the id of myModal to newSectionModal and edit app/views/instructor/courses/show.html.erb to look like this:
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newSectionModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="newSectionModalLabel">Modal title</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> 
- 
- 
-Save the file and refresh the page. Quickly test that this change did not break the functionality; if you press the button you should continue to be presented with a modal.
-
-Change the modal's title from "Modal Title" to "Add a new section" so users (instructors) will know what they are entering data for. Edit app/views/instructor/courses/show.html.erb to have a better title:
-
-<!-- Modal -->
-<div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="newSectionModalLabel">Add a new section</h4>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> 
-Save the file and refresh the page. Click the button to see the modal and notice that the title of the modal was updated.
-
-For the next step we should move the form from the instructor/sections new form into the modal we just added to our page.
-
-Whenever we build a form, we need to add the template object we are building a form for inside the action within the controller. Since we will be building the form for a new section, build a new section in app/controllers/instructor/courses_controller.rb by adding this line:
-
-class Instructor::CoursesController < ApplicationController
-  before_action :authenticate_user!
-  before_action :require_authorized_for_current_course, only: [:show]
-
-  def new
-    @course = Course.new
-  end
-
-  def create
-    @course = current_user.courses.create(course_params)
-    if @course.valid?
-      redirect_to instructor_course_path(@course)
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
-  def show
-    @section = Section.new
-  end
-
-  private
-  def require_authorized_for_current_course
-    if current_course.user != current_user
-      render plain: "Unauthorized", status: :unauthorized
-    end
-  end
-
-  helper_method :current_course
-  def current_course
-    @current_course ||= Course.find(params[:id])
-  end
-
-  def course_params
-    params.require(:course).permit(:title, :description, :cost, :image)
-  end
-end 
-Save the file.
-
-Since we've already written the code for the section's new form, instead of writing it from scratch we can just move the code. Find the code for building the form in app/views/instructor/sections/new.html.erb and copy it to your clipboard. Then return to app/views/instructor/course/show.html.erb and paste the code into the modal:
-
-<!-- Modal -->
-<div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="newSectionModalLabel">Add a new section</h4>
-      </div>
-      <div class="modal-body">
-      <%= simple_form_for @section, url: instructor_course_sections_path(current_course) do |f| %>
-        <%= f.input :title %>
-        <br />
-        <%= f.submit "Add a section", class: 'btn btn-primary' %>
-        <br />
-        <br />
-      <% end %>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div> 
- 
- 
- 
- 
- 
- 
-Save the file and refresh the page. Press the button at the bottom of the page, which will display the modal. Notice the form to create a section is within the modal.
-
-Now we have two different groupings of buttons. The button within the body of the modal will actually save the item. The Save changes button in the footer of the modal, however, will not work if it is pressed. We should replace the non-working button with a button that works. We can do this in the same way we did in the Nomster lessons.
-
-Since the code for the button that works needs to exist between the simple_form_for / end lines of code, we need to make the SimpleForm wrap both the modal-body and modal-footer divs.
-
-Edit app/views/instructor/course/show.html.erb like this:
-
-<!-- Modal -->
-<div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="newSectionModalLabel">Add a new section</h4>
-      </div>
-      <%= simple_form_for @section, url: instructor_course_sections_path(current_course) do |f| %>
-        <div class="modal-body">
-          <%= f.input :title %>
-          <br />
-          <%= f.submit "Add a section", class: 'btn btn-primary' %>
-          <br />
-          <br />
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div> 
- 
-Replace the non-working button in the footer with the submit button that works. Also, remove the breaklines since the modal would look better without them. Edit app/views/instructor/course/show.html.erb:
-
-<!-- Modal -->
-<div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-        <h4 class="modal-title" id="newSectionModalLabel">Add a new section</h4>
-      </div>
-      <%= simple_form_for @section, url: instructor_course_sections_path(current_course) do |f| %>
-        <div class="modal-body">
-          <%= f.input :title %>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <%= f.submit "Add a section", class: 'btn btn-primary' %>
-        </div>
-      <% end %>
-    </div>
-  </div>
-</div> 
-Save the file and refresh the page. Launch the modal and notice the changes that occurred.
-
-The text of the button that launches the modal says "Launch Modal Demo". Replace this with the text "Add a new section..." by editing app/views/instructor/course/show.html.erb like this:
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newSectionModal">
-  Add a new section...
-</button> 
-Save the file and refresh the page.
-
-Move the button that triggers the modal to replace the link that sends the user(instructors) to the instructor/sections new form. Edit app/views/instructor/course/show.html.erb like this:
-
-<script>
   $(function() {
-    $('.lessons').sortable({
-      update: function( event, ui ) {
-        $.ajax({
-          type: 'PUT',
-          url: ui.item.data('update-url'),
-          dataType: 'json',
-          data: { lesson: { row_order_position: ui.item.index() } }
-        });
-      }
-    });
-
 
     $('.sections').sortable({
       update: function( event, ui ) {
@@ -434,7 +31,7 @@ Move the button that triggers the modal to replace the link that sends the user(
           type: 'PUT',
           url: ui.item.data('update-url'),
           dataType: 'json',
-          data: { section: { row_order_position: ui.item.index() } }
+          data: { section: { row_order_position: ui.item.index() }}
         });
       }
     });
@@ -444,30 +41,41 @@ Move the button that triggers the modal to replace the link that sends the user(
 
 <br />
 <div class="booyah-box col-10 offset-1">
+
   <h1 class="text-center"><%= current_course.title %></h1>
-  <%= image_tag current_course.image, class: 'img-fluid' %>
+  <br />
+
+  <br />
 
   <div class="text-center">
-    <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#newSectionModal">
-      Add a new section...
+      Add a new section
     </button>
+    <%= link_to 'View course as student', course_path(current_course), class: 'btn btn-warning float-right btn-lg' %>
   </div>
+
+  <br class="clr" />
+
+  <h4 class="text-center">Sections</h4>
+  <br />
 
   <ul class="sections">
     <% current_course.sections.rank(:row_order).each do |section| %>
-      <li data-update-url="<%= instructor_section_path section %>" class="section-li">
-        <div class="header float-left">
+      <li data-update-url="<%= instructor_section_path(section) %>" class="section-li">
+
+        <div class="header">
           <span class="fa fa-ellipsis-v"></span>
           <%= section.title %>
+          <button type="button" class="btn btn-primary btn-sm float-right new-lesson-button" data-toggle="modal" data-target="#newLessonModal" data-lesson-url="<%= instructor_section_lessons_path(section) %>">
+            Add a new lesson
+          </button>
         </div>
-        <%= link_to 'New Lesson', new_instructor_section_lesson_path(section), class: 'float-right btn btn-primary btn-sm' %>
-        <br class="clr" />
-        <br class="clr" />
+
+        <br class="clr"/>
 
         <ul class="lessons">
           <% section.lessons.rank(:row_order).each do |lesson| %>
-            <li data-update-url="<%= instructor_lesson_path lesson %>">
+            <li data-update-url="<%= instructor_lesson_path(lesson) %>">
               <div class="row">
                 <div class="col-1">
                   <br />
@@ -482,19 +90,17 @@ Move the button that triggers the modal to replace the link that sends the user(
                   </p>
                 </div>
               </div>
-              <br class="clr" />
+              <br class="clr"/>
             </li>
           <% end %>
         </ul>
-        <br class="clr" />
+
       </li>
     <% end %>
+
   </ul>
 </div>
 
-
-
-<!-- Modal -->
 <div class="modal fade" id="newSectionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -502,15 +108,40 @@ Move the button that triggers the modal to replace the link that sends the user(
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">×</span>
         </button>
-        <h4 class="modal-title" id="newSectionModalLabel">Add a new section</h4>
+        <h4 class="modal-title" id="newSectionModal">Add a New Section</h4>
       </div>
       <%= simple_form_for @section, url: instructor_course_sections_path(current_course) do |f| %>
         <div class="modal-body">
           <%= f.input :title %>
+          
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <%= f.submit "Add a section", class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="newLessonModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+        <h4 class="modal-title" id="newLessonModalLabel">Add a new lesson</h4>
+      </div>
+      <%= simple_form_for @lesson, url: "#" , html: { id: 'newLessonForm' } do |f| %>
+        <div class="modal-body">
+          <%= f.input :title %>
+          <%= f.input :subtitle %>
+          <%= f.input :video %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <%= f.submit "Add Lesson", class: 'btn btn-primary' %>
         </div>
       <% end %>
     </div>
