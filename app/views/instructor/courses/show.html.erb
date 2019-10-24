@@ -5,6 +5,7 @@
       $('#newLessonForm').attr('action', lessonURL);
     });
   });
+  $(function() {
     $('.lessons').sortable({
       update: function( event, ui ) {
         $.ajax({
@@ -15,7 +16,6 @@
         });
       }
     });
-
   });
 
   $(function() {
