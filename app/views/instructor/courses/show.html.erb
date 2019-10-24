@@ -3,7 +3,6 @@
       var lessonUrl = $( event.target).data('lesson-url');
   $   ('#newLessonForm').attr('action', lessonUrl);
     });
-
     $('.lessons').sortable({
       update: function( event, ui ) {
         $.ajax({
